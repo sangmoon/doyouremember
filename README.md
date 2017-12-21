@@ -2,4 +2,4 @@
 
 - django2.0
 - jquery
-- bootstrap
+- bootstrap4
