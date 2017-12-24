@@ -19,13 +19,15 @@ from app import views
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('signup/', views.sign_up, name='sign_up'),
-    path('login/', auth_views.login,{'template_name':'login.html'}, name='login'),
-    path('logout/', auth_views.logout, name='logout'),
+    path('admin', admin.site.urls),
+    path('signup', views.sign_up, name='sign_up'),
+    path('login', auth_views.login, {'template_name': 'login.html'}, name='log_in'),
+    path('logout', auth_views.logout, name='log_out'),
     path('account_activation_sent/', views.account_activation_sent,
          name='account_activation_sent'),
     re_path(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})$',
             views.activate, name='activate'),
+    path('memories', views.memory, name='memory'),
+    path('profile', views.profile, name='profile'),
     path('', views.home, name='home'),
 ]

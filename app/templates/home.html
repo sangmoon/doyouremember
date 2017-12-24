@@ -1,9 +1,13 @@
 {% extends 'base.html' %}
 {% block content %}
-                <h1 class="cover-heading">Save your memory.</h1>
-                <br>
-            <p class="lead">Save memories that you'll forget.<br> By the time you forget, we will email you.</p>
-            <p class="lead">
-              <a href="#" class="btn btn-lg btn-secondary">Add memory</a>
-            </p>
+    <h1 class="cover-heading">Save your memory.</h1>
+    <br>
+    <p class="lead">Save memories that you would forget.<br> By the time you forget, we will email you.</p>
+    <form method="POST" action="/memories">
+        {% csrf_token %}
+        {{form.content}}
+        <br>
+        <button class="btn btn-lg btn-secondary" type="submit">Add memory</button>
+    </form>
+
 {% endblock %}

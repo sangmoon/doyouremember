@@ -1,5 +1,6 @@
-from app.forms import SignUpForm
-from app.tokens import account_activation_token
+from .forms import SignUpForm, MemoryForm
+from .tokens import account_activation_token
+from .models import Memory
 
 from django.shortcuts import render, redirect
 from django.contrib.sites.shortcuts import get_current_site
@@ -10,12 +11,15 @@ from django.utils.encoding import force_text
 from django.contrib.auth.models import User
 from django.utils.http import urlsafe_base64_decode
 from django.contrib.auth import login
+from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
 
 def home(request):
-    return render(request, 'home.html', {})
+    form = MemoryForm
+    return render(request, 'home.html', {'form': form})
 
 
 def sign_up(request):
@@ -59,3 +63,21 @@ def activate(request, uidb64, token):
         return redirect('home')
     else:
         return render(request, 'account_activation_invalid.html')
+
+
+@login_required
+def memory(request):
+    if request.method == 'POST':
+        form = MemoryForm(request.POST)
+        if form.is_valid():
+            new_memory = Memory(user=request.user,
+                                content=form.cleaned_data['content'])
+            new_memory.save()
+            return HttpResponse("Your Memory is saved")
+    else:
+        form = MemoryForm()
+    return render(request, 'home.html', {'form': form})
+
+
+def profile(request):
+    pass
