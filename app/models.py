@@ -7,13 +7,14 @@ from django.dispatch import receiver
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    received_email = models.EmailField()
     email_confirmed = models.BooleanField(default=False)
 
 
 @receiver(post_save, sender=User)
 def update_user_profile(sender, instance, created, **kwargs):
     if created:
-        Profile.objects.create(user=instance)
+        Profile.objects.create(user=instance, received_email=instance.email)
     instance.profile.save()
 
 

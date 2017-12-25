@@ -1,6 +1,6 @@
 from .forms import SignUpForm, MemoryForm
 from .tokens import account_activation_token
-from .models import Memory
+from .models import Memory, Profile
 
 from django.shortcuts import render, redirect
 from django.contrib.sites.shortcuts import get_current_site
@@ -13,6 +13,9 @@ from django.utils.http import urlsafe_base64_decode
 from django.contrib.auth import login
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
+
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
 
 # Create your views here.
 
@@ -79,5 +82,20 @@ def memory(request):
     return render(request, 'home.html', {'form': form})
 
 
+@login_required
 def profile(request):
-    pass
+    if request.method == 'POST':
+        user = request.user
+        try:
+            received_email = request.POST.get('user-received-email', user.email)
+            validate_email(received_email)
+        except ValidationError as e:
+            print(e)
+        else:
+            user.profile.received_email = received_email
+            user.save()
+
+    else:
+        user = request.user
+    return render(request, 'profile.html',
+                  {'user': user})

@@ -1,4 +1,28 @@
 {% extends 'base.html' %}
 {% block content %}
+<form style="text-align: left" method="post">
+    {% csrf_token %}
+    <dl class="form-group">
+        <dt>
+            <label for="user-profile-name">
+                name
+            </label>
+        </dt>
+        <dd>
+            <input id="user-profile-name" class="form-control" type="text" value="{{user.username}}" readonly>
+        </dd>
+    </dl>
 
+    <dl class="form-group">
+        <dt>
+            <label for="user-received-email">
+                recieved email
+            </label>
+        </dt>
+        <dd>
+            <input id="user-received-email" name="user-received-email" class="form-control" type="text" value="{{ user.profile.received_email }}">
+        </dd>
+    </dl>
+    <button type="submit">update profile</button>
+</form>
 {% endblock %}
