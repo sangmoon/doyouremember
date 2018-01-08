@@ -71,3 +71,4 @@ venv
 
 # DB dump
 database.json
+dump.*
