@@ -1,6 +1,7 @@
 from .forms import SignUpForm, MemoryForm
 from .tokens import account_activation_token
 from .models import Memory, Profile
+from .tasks import send_remember_email
 
 from django.shortcuts import render, redirect
 from django.contrib.sites.shortcuts import get_current_site
@@ -76,6 +77,8 @@ def memory(request):
             new_memory = Memory(user=request.user,
                                 content=form.cleaned_data['content'])
             new_memory.save()
+            send_remember_email.delay(request.user.pk,
+                                      form.cleaned_data['content'])
             return HttpResponse("Your Memory is saved")
     else:
         form = MemoryForm()
