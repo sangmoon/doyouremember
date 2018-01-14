@@ -5,7 +5,7 @@
 - bootstrap4
 
 
-##redis server
+## redis server
 ```shell
 $ redis-server
 ```

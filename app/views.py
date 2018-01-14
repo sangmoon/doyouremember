@@ -77,8 +77,9 @@ def memory(request):
             new_memory = Memory(user=request.user,
                                 content=form.cleaned_data['content'])
             new_memory.save()
-            send_remember_email.delay(request.user.pk,
-                                      form.cleaned_data['content'])
+            send_remember_email.apply_async(
+                (request.user.pk, form.cleaned_data['content']),
+                countdown=300)
             return HttpResponse("Your Memory is saved")
     else:
         form = MemoryForm()
@@ -90,7 +91,8 @@ def profile(request):
     if request.method == 'POST':
         user = request.user
         try:
-            received_email = request.POST.get('user-received-email', user.email)
+            received_email = request.POST.get(
+                'user-received-email', user.email)
             validate_email(received_email)
         except ValidationError as e:
             print(e)

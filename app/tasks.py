@@ -6,7 +6,7 @@ from django.contrib.auth import get_user_model
 from doyouremember.celery import app
 
 
-@app.task
+@app.task(name='send-remember-email')
 def send_remember_email(user_id, content):
     UserModel = get_user_model()
     try:
